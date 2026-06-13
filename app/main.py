@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import joblib
 import numpy as np
@@ -9,7 +10,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Load the trained XGBoost model from your serialized checkpoint
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows any origin (perfect for testing and local frontends)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)# Load the trained XGBoost model from your serialized checkpoint
 try:
     model = joblib.load("model.pkl")
 except FileNotFoundError:

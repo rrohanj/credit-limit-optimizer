@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Credit Limit Optimizer & Risk Engine</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body
+    class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans"
+  >
+    <div
+      class="w-full max-w-4xl bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 grid grid-cols-1 md:grid-cols-2"
+    >
+      <div class="p-8 border-b md:border-b-0 md:border-r border-slate-700">
+        <h1
+          class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent mb-2"
+        >
+          Limit Optimizer
+        </h1>
+        <p class="text-sm text-slate-400 mb-6">
+          Input applicant financial indicators to calculate optimal credit line
+          extensions.
+        </p>
+
+        <form id="optimizerForm" class="space-y-4">
+          <div>
+            <label
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+              >Current Credit Limit (INR / USD)</label
+            >
+            <input
+              type="number"
+              id="current_limit"
+              value="50000"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+              required
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Gender</label
+              >
+              <select
+                id="sex"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+              >
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Education</label
+              >
+              <select
+                id="education"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+              >
+                <option value="1">Graduate School</option>
+                <option value="2">University</option>
+                <option value="3">High School</option>
+                <option value="4">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Marital Status</label
+              >
+              <select
+                id="marriage"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+              >
+                <option value="1">Married</option>
+                <option value="2">Single</option>
+                <option value="3">Other</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Age</label
+              >
+              <input
+                type="number"
+                id="age"
+                value="28"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+              >Repayment Status (Last Month)</label
+            >
+            <select
+              id="repayment_status"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:border-emerald-400"
+            >
+              <option value="-1">Paid Duly / No Delay</option>
+              <option value="1">1 Month Payment Delay</option>
+              <option value="2">2 Months Payment Delay</option>
+              <option value="3">3+ Months Payment Delay</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label
+                class="block text-xxs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Current Bill</label
+              >
+              <input
+                type="number"
+                id="current_bill"
+                value="12000"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-400"
+                required
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xxs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Prior Bill</label
+              >
+              <input
+                type="number"
+                id="previous_bill"
+                value="15000"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-400"
+                required
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xxs font-semibold uppercase tracking-wider text-slate-400 mb-1"
+                >Paid Amt</label
+              >
+              <input
+                type="number"
+                id="amount_paid"
+                value="15000"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs focus:outline-none focus:border-emerald-400"
+                required
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-slate-900 font-bold p-3 rounded-lg text-sm transition duration-200 shadow-md"
+          >
+            Run Optimization Diagnostics
+          </button>
+        </form>
+      </div>
+
+      <div
+        class="p-8 bg-slate-850 flex flex-col justify-center items-center text-center relative"
+      >
+        <div id="placeholder" class="space-y-3">
+          <div class="text-4xl text-slate-600">📊</div>
+          <h3 class="text-lg font-semibold text-slate-400">
+            Awaiting Diagnostics
+          </h3>
+          <p class="text-xs text-slate-500 max-w-xs">
+            Fill out the customer financial parameters on the left to invoke the
+            live XGBoost risk pipeline.
+          </p>
+        </div>
+
+        <div
+          id="loading"
+          class="hidden text-sm text-cyan-400 font-semibold animate-pulse"
+        >
+          Processing system boundaries...
+        </div>
+
+        <div id="resultsCard" class="hidden w-full text-left space-y-6">
+          <div>
+            <span
+              class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1"
+              >Portfolio Strategy</span
+            >
+            <div
+              id="res_strategy"
+              class="text-xl font-black text-emerald-400 leading-tight"
+            >
+              --
+            </div>
+          </div>
+
+          <div
+            class="grid grid-cols-2 gap-4 border-t border-b border-slate-700 py-4"
+          >
+            <div>
+              <span class="text-xs text-slate-400 block">Baseline Limit</span>
+              <span id="res_base" class="text-lg font-bold text-slate-300"
+                >--</span
+              >
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 block"
+                >Optimized Recommendation</span
+              >
+              <span id="res_opt" class="text-lg font-black text-cyan-400"
+                >--</span
+              >
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-400">ML Predicted Default Risk</span>
+                <span id="res_risk_pct" class="font-bold text-slate-300"
+                  >0%</span
+                >
+              </div>
+              <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div
+                  id="risk_bar"
+                  class="bg-gradient-to-r from-emerald-400 to-rose-500 h-full transition-all duration-500"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+            <div class="text-xxs text-slate-500 flex justify-between">
+              <span
+                >Calculated Utilization: <strong id="res_util">--</strong></span
+              >
+              <span>Min Pay Coverage: <strong id="res_pay">--</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // REPLACE THIS WITH YOUR LIVE RENDER URL ONCE DEPLOYED
+      // Localhost testing URL placeholder:
+      const API_URL = 'http://127.0.0.1:8000/optimize-limit';
+
+      document
+        .getElementById('optimizerForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Toggle view states for loaders
+          document.getElementById('placeholder').classList.add('hidden');
+          document.getElementById('resultsCard').classList.add('hidden');
+          document.getElementById('loading').classList.remove('hidden');
+
+          // Format raw elements directly into verified structural definitions
+          const payload = {
+            current_limit: parseFloat(
+              document.getElementById('current_limit').value,
+            ),
+            sex: parseInt(document.getElementById('sex').value),
+            education: parseInt(document.getElementById('education').value),
+            marriage: parseInt(document.getElementById('marriage').value),
+            age: parseInt(document.getElementById('age').value),
+            repayment_status_last_month: parseInt(
+              document.getElementById('repayment_status').value,
+            ),
+            current_bill_balance: parseFloat(
+              document.getElementById('current_bill').value,
+            ),
+            previous_bill_balance: parseFloat(
+              document.getElementById('previous_bill').value,
+            ),
+            amount_paid_last_month: parseFloat(
+              document.getElementById('amount_paid').value,
+            ),
+          };
+
+          try {
+            const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            if (!response.ok)
+              throw new Error('API compilation exception encountered.');
+
+            const data = await response.json();
+
+            // Inject variables back into targeted document components
+            document.getElementById('res_strategy').innerText =
+              data.portfolio_action.strategy;
+            document.getElementById('res_base').innerText =
+              data.portfolio_action.baseline_limit.toLocaleString();
+            document.getElementById('res_opt').innerText =
+              data.portfolio_action.recommended_optimized_limit.toLocaleString();
+
+            const riskVal =
+              data.risk_evaluation.predicted_probability_of_default;
+            document.getElementById('res_risk_pct').innerText =
+              (riskVal * 100).toFixed(1) + '%';
+            document.getElementById('risk_bar').style.width =
+              riskVal * 100 + '%';
+
+            document.getElementById('res_util').innerText =
+              data.features_calculated.utilization_rate;
+            document.getElementById('res_pay').innerText =
+              data.features_calculated.payment_to_minimum_coverage;
+
+            // Colorize the action text to reflect banking decisions dynamically
+            const stratText = data.portfolio_action.strategy.toLowerCase();
+            const stratElement = document.getElementById('res_strategy');
+            if (
+              stratText.includes('aggressive') ||
+              stratText.includes('standard')
+            ) {
+              stratElement.className =
+                'text-xl font-black text-emerald-400 leading-tight';
+            } else if (stratText.includes('freeze')) {
+              stratElement.className =
+                'text-xl font-black text-amber-400 leading-tight';
+            } else {
+              stratElement.className =
+                'text-xl font-black text-rose-400 leading-tight';
+            }
+
+            // Show final card
+            document.getElementById('resultsCard').classList.remove('hidden');
+          } catch (err) {
+            alert(
+              'Error connecting to the risk engine backend. Verify your server path is listening.',
+            );
+            document.getElementById('placeholder').classList.remove('hidden');
+          } finally {
+            document.getElementById('loading').classList.add('hidden');
+          }
+        });
+    </script>
+  </body>
+</html>
